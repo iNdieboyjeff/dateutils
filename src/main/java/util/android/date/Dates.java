@@ -44,6 +44,12 @@ public class Dates {
             // Do nothing
         }
 
+        try {
+            return TwitterDate.parseDate(dateString);
+        } catch (DateParseException ignored) {
+            // Do nothing
+        }
+
         throw new DateParseException("Parse error: " + dateString);
     }
 
@@ -82,6 +88,13 @@ public class Dates {
         return AtomDate.formatAtomDate(inDate, timeZone);
     }
 
+    /**
+     * Do two dates represent the same actual day?
+     *
+     * @param date1
+     * @param date2
+     * @return boolean
+     */
     public static boolean isSameDay(final Date date1, final Date date2) {
         if (date1 == null || date2 == null) {
             throw new IllegalArgumentException("The date must not be null");
@@ -93,6 +106,13 @@ public class Dates {
         return isSameDay(cal1, cal2);
     }
 
+    /**
+     * Do two dates represent the same actual day?
+     *
+     * @param cal1
+     * @param cal2
+     * @return boolean
+     */
     public static boolean isSameDay(final Calendar cal1, final Calendar cal2) {
         if (cal1 == null || cal2 == null) {
             throw new IllegalArgumentException("The date must not be null");

@@ -58,4 +58,11 @@ public class DatesTest {
         Date d2 = new Date(1957364939620L);
         assertFalse(Dates.isSameDay(d1, d2));
     }
+
+    @Test
+    public void testIsSameDayOverTimezone() throws AtomDateParseException {
+        String atomDate1 = "2009-11-04T19:55:41Z";
+        String atomDate2 = "2009-11-04T19:55:41+12:00";
+        assertTrue(Dates.isSameDay(AtomDate.parseDate(atomDate1), AtomDate.parseDate(atomDate2)));
+    }
 }

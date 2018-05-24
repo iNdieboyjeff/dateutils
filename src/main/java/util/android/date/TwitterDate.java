@@ -6,22 +6,22 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class JSDate {
+public class TwitterDate {
 
-    private JSDate() {
+    public static final String DATE_FORMAT = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
+
+    private TwitterDate() {
     }
 
-    public static final String DATE_FORMAT = "EE MMM d y HH:mm:ss 'GMT'Z (zz)";
-
-    public static Date parseDate(String dateString) throws JavaScriptDateParseException {
+    public static Date parseDate(String dateString) throws DateParseException {
         if (dateString == null || dateString.isEmpty()) {
-            throw new JavaScriptDateParseException("Cannot parse null or empty date string");
+            throw new DateParseException("Cannot parse null or empty date string");
         }
         try {
             DateFormat jsDateFormat = new SimpleDateFormat(DATE_FORMAT);
             return jsDateFormat.parse(dateString);
         } catch (ParseException e) {
-            throw new JavaScriptDateParseException("Cannot parse: " + dateString, e);
+            throw new DateParseException("Cannot parse: " + dateString, e);
         }
     }
 

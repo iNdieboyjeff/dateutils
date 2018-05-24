@@ -8,7 +8,7 @@ import java.util.TimeZone;
 
 public class AtomDate {
 
-    private AtomDate() {
+    AtomDate() {
     }
 
     /**
@@ -76,6 +76,9 @@ public class AtomDate {
     /**
      * Parse an Atom date String into Date object. This is a fairly lenient parse and does not require the date String
      * to conform exactly.
+     *
+     * If the date String contains the 'Z' character then UTC will be assumed, overriding any following timezone offset
+     * specified int he string (which is incorrect anyway)
      *
      * @param dateString A date string in the ATOM format
      * @return java.util.Date
