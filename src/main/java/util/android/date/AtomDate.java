@@ -102,15 +102,11 @@ public class AtomDate {
         }
         Date d = null;
         for (int n = 0; n < atomMasks.length; n++) {
-            try {
                 atomFormats[n].setTimeZone(tz);
                 atomFormats[n].setLenient(true);
                 d = atomFormats[n].parse(dateString, new ParsePosition(0));
                 if (d != null)
                     break;
-            } catch (Exception ignored) {
-                // Do nothing
-            }
         }
         if (d == null) {
             throw new AtomDateParseException("Cannot parse: " + dateString);

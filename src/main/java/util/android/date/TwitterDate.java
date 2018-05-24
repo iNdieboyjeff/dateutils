@@ -10,7 +10,7 @@ public class TwitterDate {
 
     public static final String DATE_FORMAT = "EEE MMM dd HH:mm:ss ZZZZZ yyyy";
 
-    private TwitterDate() {
+    TwitterDate() {
     }
 
     public static Date parseDate(String dateString) throws DateParseException {

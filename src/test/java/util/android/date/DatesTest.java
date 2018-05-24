@@ -65,4 +65,18 @@ public class DatesTest {
         String atomDate2 = "2009-11-04T19:55:41+12:00";
         assertTrue(Dates.isSameDay(AtomDate.parseDate(atomDate1), AtomDate.parseDate(atomDate2)));
     }
+
+    @Test
+    public void testGetAgeOnDate1() throws AtomDateParseException {
+        String atomDate1 = "1979-06-19T19:55:41Z";
+        String atomDate2 = "2018-06-19T19:55:41Z";
+        assertEquals(39, Dates.getAgeOnDate(AtomDate.parseDate(atomDate1), AtomDate.parseDate(atomDate2)));
+    }
+
+    @Test
+    public void testGetAgeOnDate2() throws AtomDateParseException {
+        String atomDate1 = "1979-06-19T19:55:41Z";
+        String atomDate2 = "2018-06-18T19:55:41Z";
+        assertEquals(38, Dates.getAgeOnDate(AtomDate.parseDate(atomDate1), AtomDate.parseDate(atomDate2)));
+    }
 }

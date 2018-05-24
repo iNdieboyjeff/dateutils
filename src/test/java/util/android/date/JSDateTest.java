@@ -7,6 +7,7 @@ import org.junit.Test;
 import java.util.Date;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 public class JSDateTest {
 
@@ -43,4 +44,20 @@ public class JSDateTest {
         String dateIn = "Wed Mar 25 2015 01:00:00 GMT+0100 (CET)";
         assertEquals(dateIn, JSDate.formatDate(new Date(1427241600000L), TimeZoneConstants.TZ_CET));
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFormatJSDateWithNoDate1() {
+        JSDate.formatDate(null);
+    }
+
+    @Test(expected = JavaScriptDateParseException.class)
+    public void parseNullDate() throws JavaScriptDateParseException {
+        JSDate.parseDate(null);
+    }
+
+    @Test
+    public void testConstructor() {
+        assertNotNull(new JSDate());
+    }
+
 }

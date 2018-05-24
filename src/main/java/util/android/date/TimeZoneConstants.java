@@ -7,7 +7,7 @@ import java.util.TimeZone;
  */
 public class TimeZoneConstants {
 
-    private TimeZoneConstants() {
+    TimeZoneConstants() {
     }
 
     public static final TimeZone TZ_LONDON = TimeZone.getTimeZone("Europe/London");

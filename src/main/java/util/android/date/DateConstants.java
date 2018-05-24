@@ -2,7 +2,7 @@ package util.android.date;
 
 public class DateConstants {
 
-    private DateConstants() {
+    DateConstants() {
     }
 
     public static final long MILLIS_PER_SECOND = 1000;

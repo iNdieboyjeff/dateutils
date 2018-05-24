@@ -8,7 +8,7 @@ import java.util.TimeZone;
 
 public class JSDate {
 
-    private JSDate() {
+    JSDate() {
     }
 
     public static final String DATE_FORMAT = "EE MMM d y HH:mm:ss 'GMT'Z (zz)";

@@ -2,11 +2,12 @@ package util.android.date;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.TimeZone;
 
 /**
  * Utility class for Date related functions.
- *
+ * <p>
  * This provides a simple way to invoke functionality contained in other classes in this library, along with other
  * stand-alone date/time related functions.
  *
@@ -19,7 +20,7 @@ public class Dates {
 
     /**
      * Attempt to parse a date string into a Date object.
-     *
+     * <p>
      * This function is a wrapper that tries to parse a Date using the parseDate() method of the other classes in
      * this package in order until it finds a match (or the Date fails to parse at all).
      *
@@ -55,12 +56,12 @@ public class Dates {
 
     /**
      * Format a given Date in Atom format (RFC 3339) using UTC offset.
-     *
+     * <p>
      * As the date will be using UTC the TimeZone will be indicated using Z rather than an offset of +00:00
-     *
+     * <p>
      * Examples of output String are:
-     *
-     *      2009-11-04T20:55:41Z
+     * <p>
+     * 2009-11-04T20:55:41Z
      *
      * @param inDate Date to format
      * @return java.lang.String representation of Date in Atom format
@@ -71,16 +72,16 @@ public class Dates {
 
     /**
      * Format a given Date in Atom format (RFC 3339) using specified TimeZone offset
-     *
+     * <p>
      * Where the TimeZone is the same at UTC the UTC offset will be indicated using Z, otherwise it will be in the
      * +/-HH:MM format (e.g. +01:00, +05:00, -02:00)
-     *
+     * <p>
      * Examples of output String are:
+     * <p>
+     * 2009-11-04T20:55:41Z
+     * 2009-11-04T20:55:41+01:00
      *
-     *       2009-11-04T20:55:41Z
-     *       2009-11-04T20:55:41+01:00
-     *
-     * @param inDate Date to format
+     * @param inDate   Date to format
      * @param timeZone TimeZone to use when calculating the offset from UTC to display
      * @return String representation of Date in Atom format
      */
@@ -120,5 +121,126 @@ public class Dates {
         return cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
                 cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
                 cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+    }
+
+    /**
+     * Add a number of days to a Date.
+     * <p>
+     * Returns the time at midnight on the new date.
+     *
+     * @param d
+     * @param days
+     * @return
+     */
+    public static Date getDatePlus(Date d, int days) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(d);
+        cal.add(Calendar.DAY_OF_YEAR, days); // <--
+        cal.set(Calendar.HOUR_OF_DAY, 0);
+        cal.set(Calendar.MINUTE, 0);
+        cal.set(Calendar.SECOND, 0);
+        cal.set(Calendar.MILLISECOND, 0);
+
+        return cal.getTime();
+    }
+
+    /**
+     * Add a number of days to today's date.
+     * <p>
+     * Returns the time at midnight on the new date.
+     *
+     * @param days
+     * @return
+     */
+    public static Date getTodayPlus(int days) {
+        return getDatePlus(new Date(), days);
+    }
+
+    /**
+     * Get the age on a specified date based on a date of birth
+     *
+     * @param dateOfBirth
+     * @param onDate
+     * @return
+     */
+    public static int getAgeOnDate(Date dateOfBirth, Date onDate) {
+        GregorianCalendar cal = new GregorianCalendar();
+        cal.setTime(onDate);
+
+        int y;
+        int m;
+        int d;
+        int a;
+
+        y = cal.get(Calendar.YEAR);
+        m = cal.get(Calendar.MONTH);
+        d = cal.get(Calendar.DAY_OF_MONTH);
+
+        cal.setTime(dateOfBirth);
+
+        a = y - cal.get(Calendar.YEAR);
+        if ((m < cal.get(Calendar.MONTH))
+                || ((m == cal.get(Calendar.MONTH)) && (d < cal
+                .get(Calendar.DAY_OF_MONTH)))) {
+            --a;
+        }
+        if (a < 0)
+            throw new IllegalArgumentException("Age < 0");
+        return a;
+    }
+
+    /**
+     * Get the current age based on a date of birth
+     *
+     * @param dateOfBirth
+     * @return
+     */
+    public static int getAge(Date dateOfBirth) {
+        return getAgeOnDate(dateOfBirth, new Date());
+    }
+
+    public static boolean isYesterday(Date date) {
+        Calendar c1 = Calendar.getInstance(); // today
+        c1.add(Calendar.DAY_OF_YEAR, -1); // yesterday
+
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(date); // your date
+
+        return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+                && c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR);
+    }
+
+    public static boolean isYesterday(long time) {
+        return isYesterday(new Date(time));
+    }
+
+    public static boolean isToday(Date date) {
+        Calendar c1 = Calendar.getInstance(); // today
+        c1.add(Calendar.DAY_OF_YEAR, 0); // yesterday
+
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(date); // your date
+
+        return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+                && c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR);
+    }
+
+    public static boolean isToday(long time) {
+        return isToday(new Date(time));
+    }
+
+    public static boolean isTomorrow(Date date) {
+        Calendar c1 = Calendar.getInstance(); // today
+        c1.add(Calendar.DAY_OF_YEAR, 1); // yesterday
+
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(date); // your date
+
+        return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
+                && c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR);
+    }
+
+    public static boolean isTomorrow(long time) {
+        return isTomorrow(new Date(time));
     }
 }
