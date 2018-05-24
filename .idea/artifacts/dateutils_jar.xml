@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" build-on-make="true" name="dateutils:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/dateutils_jar</output-path>
+    <root id="archive" name="dateutils.jar">
+      <element id="module-output" name="dateutils_main" />
+    </root>
+  </artifact>
+</component>
