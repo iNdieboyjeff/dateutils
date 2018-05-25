@@ -13,7 +13,7 @@ plugins {
     id "com.jfrog.bintray" version "1.7.3"
 }
 
-def versionNumber = '0.0.1'
+def versionNumber = '0.0.2'
 
 allprojects {
 

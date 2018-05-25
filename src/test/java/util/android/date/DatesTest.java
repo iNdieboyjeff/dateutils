@@ -39,10 +39,30 @@ public class DatesTest {
     }
 
     @Test(expected = DateParseException.class)
+    public void parseNullDate() throws DateParseException {
+        Dates.parseDate(null);
+    }
+
+    @Test(expected = DateParseException.class)
     public void parseDate() throws DateParseException {
         testStandardUTCAtom();
         parseBasicJSDate();
         parseInvalidDate();
+    }
+
+    @Test
+    public void testFormatStandardUTCAtom1() throws DateParseException {
+        String atomDate = "2009-11-04T19:55:41Z";
+        Date dateVal = Dates.parseDate(atomDate);
+        assertEquals(atomDate, Dates.asAtomUTC(dateVal));
+    }
+
+    @Test
+    public void testFormatStandardUTCAtom2() throws DateParseException {
+        String atomDate1 = "2009-11-04T19:55:41Z";
+        String atomDate2 = "2009-11-04T21:55:41+02:00";
+        Date dateVal = Dates.parseDate(atomDate2);
+        assertEquals(atomDate1, Dates.asAtomUTC(dateVal));
     }
 
     @Test

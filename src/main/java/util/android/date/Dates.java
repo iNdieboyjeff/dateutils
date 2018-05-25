@@ -40,6 +40,12 @@ public class Dates {
         }
 
         try {
+            return SQLDate.parseDate(dateString);
+        } catch (DateParseException ignored) {
+            // Do nothing
+        }
+
+        try {
             return JSDate.parseDate(dateString);
         } catch (DateParseException ignored) {
             // Do nothing

@@ -100,3 +100,4 @@ build/test-results/
 build/tmp/
 src/main/resources/
 src/test/resources/
+/.idea/sonarlint/
