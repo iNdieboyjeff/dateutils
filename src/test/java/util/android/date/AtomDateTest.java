@@ -54,6 +54,13 @@ public class AtomDateTest {
     }
 
     @Test
+    public void testStandardAtomWithMS1() throws AtomDateParseException {
+        String atomDate = "2018-05-25T07:36:28.418Z";
+        Date dateVal = AtomDate.parseDate(atomDate);
+        assertEquals(1527233788418L, dateVal.getTime());
+    }
+
+    @Test
     public void testStandardAtomWithNegativeOffset2() throws AtomDateParseException {
         String atomDate = "2009-11-04T17:55:41-0200";
         Date dateVal = AtomDate.parseDate(atomDate);
@@ -118,6 +125,20 @@ public class AtomDateTest {
     }
 
     @Test
+    public void testFormatAtomDateMSWithoutTimeZone1() {
+        String atomDate = "2009-11-04T19:55:41.000Z";
+        Date dateVal = new Date(1257364541000L);
+        assertEquals(atomDate, AtomDate.formatAtomDateWithMS(dateVal));
+    }
+
+    @Test
+    public void testFormatAtomDateMSWithoutTimeZone2() {
+        String atomDate = "2018-05-25T07:36:28.418Z";
+        Date dateVal = new Date(1527233788418L);
+        assertEquals(atomDate, AtomDate.formatAtomDateWithMS(dateVal));
+    }
+
+    @Test
     public void testFormatAtomTimeWithoutTimeZone() {
         String atomDate = "2009-11-04T19:55:41Z";
         assertEquals(atomDate, AtomDate.formatAtomDate(1257364541000L));
@@ -139,6 +160,12 @@ public class AtomDateTest {
     public void testFormatAtomDateWithNoDate2() {
         AtomDate.formatAtomDate(null, TimeZoneConstants.TZ_CET);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testFormatAtomDateWithNoDate3() {
+        AtomDate.formatAtomDateWithMS(null, TimeZoneConstants.TZ_CET);
+    }
+
 
     @Test
     public void testFormatAtomTimeWithTimeZone() {

@@ -2,6 +2,9 @@
 
 **dateutils** is a Java library for handling some common date/time functions.
 
+[![Download](https://api.bintray.com/packages/indieboyjeff/maven/dateutils/images/download.svg) ](https://bintray.com/indieboyjeff/maven/dateutils/_latestVersion)
+[![Hex.pm](https://img.shields.io/hexpm/l/plug.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+
 The library is currently in the early stages of development and so the range of functionality may appear limited.
 
 ## Current Functionality

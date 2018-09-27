@@ -66,6 +66,22 @@ public class DatesTest {
     }
 
     @Test
+    public void testFormatStandardAtom1() throws DateParseException {
+        String atomDate1 = "2009-11-04T19:55:41Z";
+        String atomDate2 = "2009-11-04T21:55:41+02:00";
+        Date dateVal = Dates.parseDate(atomDate2);
+        assertEquals(atomDate1, Dates.asAtom(dateVal, TimeZoneConstants.TZ_GMT));
+    }
+
+    @Test
+    public void testFormatStandardAtom2() throws DateParseException {
+        String atomDate1 = "2009-11-04T19:55:41Z";
+        String atomDate2 = "2009-11-04T21:55:41+02:00";
+        Date dateVal = Dates.parseDate(atomDate1);
+        assertEquals(atomDate2, Dates.asAtom(dateVal, TimeZoneConstants.TZ_EET));
+    }
+
+    @Test
     public void testIsSameDayDateWithSameDayDates() {
         Date d1 = new Date(1257364541000L);
         Date d2 = new Date(1257364939620L);
@@ -77,6 +93,27 @@ public class DatesTest {
         Date d1 = new Date(1257364541000L);
         Date d2 = new Date(1957364939620L);
         assertFalse(Dates.isSameDay(d1, d2));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIsSameDayDateWithNullFirst() {
+        Date d1 = null;
+        Date d2 = new Date(1957364939620L);
+        Dates.isSameDay(d1, d2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIsSameDayDateWithNullSecond() {
+        Date d1 = new Date(1257364541000L);
+        Date d2 = null;
+        Dates.isSameDay(d1, d2);
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void testIsSameDayDateWithNullBoth() {
+        Date d1 = null;
+        Date d2 = null;
+        Dates.isSameDay(d1, d2);
     }
 
     @Test

@@ -26,6 +26,7 @@ public class AtomDate {
             "yyyy-MM-dd't'HH:mm:ss.SSS'z'",
             "yyyy-MM-dd'T'HH:mm:ssZ",
             "yyyy-MM-dd'T'HH:mm:ssXXX",
+            "yyyy-MM-dd'T'HH:mm:ss.SSSXXX",
             "yyyy-MM-dd'T'HH:mm:ss Z",
             "yyyy-MM-dd'T'HH:mm:ssz",
             "yyyy-MM-dd't'HH:mm:ssz",
@@ -70,7 +71,8 @@ public class AtomDate {
             new SimpleDateFormat(atomMasks[21]),
             new SimpleDateFormat(atomMasks[22]),
             new SimpleDateFormat(atomMasks[23]),
-            new SimpleDateFormat(atomMasks[24])
+            new SimpleDateFormat(atomMasks[24]),
+            new SimpleDateFormat(atomMasks[25])
     };
 
     /**
@@ -151,5 +153,18 @@ public class AtomDate {
      */
     public static String formatAtomDate(long inTime, TimeZone timeZone) {
         return formatAtomDate(new Date(inTime), timeZone);
+    }
+
+    public static String formatAtomDateWithMS(Date inDate) {
+        return formatAtomDateWithMS(inDate, TimeZoneConstants.TZ_UTC);
+    }
+
+    public static String formatAtomDateWithMS(Date inDate, TimeZone timeZone) {
+        if (inDate == null) {
+            throw new IllegalArgumentException("The date must not be null");
+        }
+        DateFormat atomDateFormat = new SimpleDateFormat(atomMasks[8]);
+        atomDateFormat.setTimeZone(timeZone);
+        return atomDateFormat.format(inDate);
     }
 }
