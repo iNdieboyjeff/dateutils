@@ -4,6 +4,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.TimeZone;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Utility class for Date related functions.
@@ -77,6 +78,55 @@ public class Dates {
     }
 
     /**
+     * Format a given Date in Atom format (RFC 3339) using UTC offset.
+     * <p>
+     * As the date will be using UTC the TimeZone will be indicated using Z rather than an offset of +00:00
+     * <p>
+     * Examples of output String are:
+     * <p>
+     * 2009-11-04T20:55:41Z
+     *
+     * @param inDate timestamp to format
+     * @return java.lang.String representation of Date in Atom format
+     */
+    public static String asAtomUTC(long inDate) {
+        return AtomDate.formatAtomDate(inDate);
+    }
+
+    /**
+     * Format a given Date in Atom format (RFC 3339) using UTC offset.
+     * <p>
+     * As the date will be using UTC the TimeZone will be indicated using Z rather than an offset of +00:00
+     * <p>
+     * Examples of output String are:
+     * <p>
+     * 2009-11-04T20:55:41Z
+     *
+     * @param inDate Calendar to format
+     * @return java.lang.String representation of Date in Atom format
+     */
+    public static String asAtomUTC(Calendar inDate) {
+        return AtomDate.formatAtomDate(inDate.getTime());
+    }
+
+    /**
+     * Format a given Date in Atom format (RFC 3339) using UTC offset.
+     * <p>
+     * As the date will be using UTC the TimeZone will be indicated using Z rather than an offset of +00:00
+     * <p>
+     * Examples of output String are:
+     * <p>
+     * 2009-11-04T20:55:41Z
+     *
+     * @param inDate String date to format
+     * @return java.lang.String representation of Date in Atom format
+     * @throws DateParseException
+     */
+    public static String asAtomUTC(String inDate) throws DateParseException {
+        return AtomDate.formatAtomDate(Dates.parseDate(inDate));
+    }
+
+    /**
      * Format a given Date in Atom format (RFC 3339) using specified TimeZone offset
      * <p>
      * Where the TimeZone is the same at UTC the UTC offset will be indicated using Z, otherwise it will be in the
@@ -93,40 +143,6 @@ public class Dates {
      */
     public static String asAtom(Date inDate, TimeZone timeZone) {
         return AtomDate.formatAtomDate(inDate, timeZone);
-    }
-
-    /**
-     * Do two dates represent the same actual day?
-     *
-     * @param date1
-     * @param date2
-     * @return boolean
-     */
-    public static boolean isSameDay(final Date date1, final Date date2) {
-        if (date1 == null || date2 == null) {
-            throw new IllegalArgumentException("The date must not be null");
-        }
-        final Calendar cal1 = Calendar.getInstance();
-        cal1.setTime(date1);
-        final Calendar cal2 = Calendar.getInstance();
-        cal2.setTime(date2);
-        return isSameDay(cal1, cal2);
-    }
-
-    /**
-     * Do two dates represent the same actual day?
-     *
-     * @param cal1
-     * @param cal2
-     * @return boolean
-     */
-    public static boolean isSameDay(final Calendar cal1, final Calendar cal2) {
-        if (cal1 == null || cal2 == null) {
-            throw new IllegalArgumentException("The date must not be null");
-        }
-        return cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
-                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
-                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
     }
 
     /**
@@ -205,6 +221,40 @@ public class Dates {
         return getAgeOnDate(dateOfBirth, new Date());
     }
 
+    /**
+     * Do two dates represent the same actual day?
+     *
+     * @param date1
+     * @param date2
+     * @return boolean
+     */
+    public static boolean isSameDay(final Date date1, final Date date2) {
+        if (date1 == null || date2 == null) {
+            throw new IllegalArgumentException("The date must not be null");
+        }
+        final Calendar cal1 = Calendar.getInstance();
+        cal1.setTime(date1);
+        final Calendar cal2 = Calendar.getInstance();
+        cal2.setTime(date2);
+        return isSameDay(cal1, cal2);
+    }
+
+    /**
+     * Do two dates represent the same actual day?
+     *
+     * @param cal1
+     * @param cal2
+     * @return boolean
+     */
+    public static boolean isSameDay(final Calendar cal1, final Calendar cal2) {
+        if (cal1 == null || cal2 == null) {
+            throw new IllegalArgumentException("The date must not be null");
+        }
+        return cal1.get(Calendar.ERA) == cal2.get(Calendar.ERA) &&
+                cal1.get(Calendar.YEAR) == cal2.get(Calendar.YEAR) &&
+                cal1.get(Calendar.DAY_OF_YEAR) == cal2.get(Calendar.DAY_OF_YEAR);
+    }
+
     public static boolean isYesterday(Date date) {
         Calendar c1 = Calendar.getInstance(); // today
         c1.add(Calendar.DAY_OF_YEAR, -1); // yesterday
@@ -215,6 +265,7 @@ public class Dates {
         return c1.get(Calendar.YEAR) == c2.get(Calendar.YEAR)
                 && c1.get(Calendar.DAY_OF_YEAR) == c2.get(Calendar.DAY_OF_YEAR);
     }
+
 
     public static boolean isYesterday(long time) {
         return isYesterday(new Date(time));
@@ -248,5 +299,45 @@ public class Dates {
 
     public static boolean isTomorrow(long time) {
         return isTomorrow(new Date(time));
+    }
+
+    /**
+     * Check if a date falls between two specified dates
+     *
+     * @param from Starting date of date range to check
+     * @param to   End date of date range to check
+     * @param test Date you want to test
+     * @return
+     * @throws DateRangeException if End date is before Start date
+     */
+    public static boolean isBetween(Date from, Date to, Date test) throws DateRangeException {
+        if (to.before(from) || from.after(to)) {
+            throw new DateRangeException("From date is after to date");
+        }
+        return !test.before(from) && !test.after(to);
+    }
+
+    /**
+     * Get the number of days between now and a specified date.
+     *
+     * @param date
+     * @return long - number of days until specified data. Returns a negative value if date has already passed.
+     */
+    public static long getDaysUntil(Date date) {
+
+        Calendar c1 = Calendar.getInstance();
+        c1.set(Calendar.HOUR_OF_DAY, 0);
+        c1.set(Calendar.MINUTE, 0);
+        c1.set(Calendar.SECOND, 0);
+        c1.set(Calendar.MILLISECOND, 0);
+
+        Calendar c2 = Calendar.getInstance();
+        c2.setTime(date); // your date
+        c1.set(Calendar.HOUR_OF_DAY, 0);
+        c1.set(Calendar.MINUTE, 0);
+        c1.set(Calendar.SECOND, 0);
+        c1.set(Calendar.MILLISECOND, 0);
+
+        return TimeUnit.MILLISECONDS.toDays(c2.getTimeInMillis() - c1.getTimeInMillis());
     }
 }
